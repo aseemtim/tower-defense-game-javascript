@@ -15,7 +15,17 @@ const player = {
         ctx.fillStyle = this.color;
         ctx.fill();
     }
-    
+}
+
+const enemy = {
+    x:280,
+    y:280,
+    speed: 2,
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,2,0,Math.PI*2,false);
+        ctx.stroke()
+    }
 }
 
 function checkBoundary(x, y) {
@@ -26,7 +36,23 @@ function checkBoundary(x, y) {
     if (y < 0) return [x, 0]
     return [x,y];
 }
-player.draw()
+
+function drawCloser() {
+    if (player.x > enemy.x) {
+        enemy.x += 1
+    }
+    if (player.y > enemy.y) {
+        enemy.y += 1
+    }
+    if (player.x < enemy.x) {
+        enemy.x -= 1
+    }
+    if (player.y < enemy.y) {
+        enemy.y -= 1
+    }
+}
+player.draw();
+enemy.draw();
 const keys = {};
 
 document.addEventListener("keydown", (e) => keys[e.key] = true);
@@ -42,6 +68,8 @@ function gameLoop() {
     player.x = checkBoundary(player.x,player.y)[0]
     player.y = checkBoundary(player.x,player.y)[1]
     player.draw();
+    drawCloser();
+    enemy.draw();
     requestAnimationFrame(gameLoop);
 }
 
